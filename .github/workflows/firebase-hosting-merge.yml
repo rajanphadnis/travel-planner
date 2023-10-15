@@ -7,7 +7,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     container:
-      image: cirruslabs/flutter
+      image: ghcr.io/cirruslabs/flutter:3.13.6
     steps:
       - uses: actions/checkout@v2
       # - uses: dart-lang/setup-dart@v1
