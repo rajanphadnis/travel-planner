@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "859614483839",
+    "project_id": "simple-travelplanner",
+    "storage_bucket": "simple-travelplanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859614483839:android:95c2455c85f69bd4bb764a",
+        "android_client_info": {
+          "package_name": "com.example.travel_planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "859614483839-dppfbhp001msk8q1vfjo285r23m6sia0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCInHqmI8RDmJcgnSPfWX9uBT4aHMsoN5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "859614483839-dppfbhp001msk8q1vfjo285r23m6sia0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

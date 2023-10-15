@@ -1,6 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_planner/firebase_options.dart';
+import 'package:travel_planner/pages/login.dart';
+import 'package:travel_planner/pages/trip_list.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const TravelPlanner());
 }
 
@@ -12,7 +21,11 @@ class TravelPlanner extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+          background: Colors.black87,
+        ),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Home Page'),
@@ -26,14 +39,30 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
-      ),
-      body: const Center(
-        child: Text("text"),
-      ),
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return const LoginScreen();
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: Text(title),
+              actions: [
+                TextButton.icon(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  icon: const Icon(Icons.logout),
+                  label: const Text("Logout"),
+                ),
+              ],
+            ),
+            body: const Center(child: TripList()),
+          );
+        }
+      },
     );
   }
 }
