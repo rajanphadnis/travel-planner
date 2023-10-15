@@ -19,7 +19,7 @@ class TravelPlanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Simple Travel Planner',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
@@ -28,7 +28,7 @@ class TravelPlanner extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Home Page'),
+      home: const MyHomePage(title: 'Travel Planner'),
     );
   }
 }

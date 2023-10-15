@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/pages/trip.dart';
 
 class TripCard extends StatelessWidget {
   final int index;
@@ -24,7 +25,8 @@ class TripCard extends StatelessWidget {
             Radius.circular(20),
           ),
           onTap: () {
-            debugPrint("test");
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TripScreen(trip)));
           },
           child: Center(
             child: Text(
