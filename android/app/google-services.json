@@ -29,6 +29,13 @@
             {
               "client_id": "859614483839-dppfbhp001msk8q1vfjo285r23m6sia0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "859614483839-8d7bj5892qrsrhrsuif7bmerk1t7sl84.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelPlanner"
+              }
             }
           ]
         }

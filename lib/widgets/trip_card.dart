@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/trip.dart';
 
 class TripCard extends StatelessWidget {
   final int index;
-  const TripCard(this.index, {super.key});
+  final Trip trip;
+  const TripCard(this.index, this.trip, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class TripCard extends StatelessWidget {
           },
           child: Center(
             child: Text(
-              'Trip #$index',
+              trip.name,
               style: const TextStyle(fontSize: 30.0),
               textAlign: TextAlign.center,
             ),
