@@ -5,9 +5,9 @@ class TripStop {
   final DateTime startTime;
   final DateTime endTime;
   final int index;
-  final GeoPoint lat_lng;
+  final GeoPoint latLng;
 
-  TripStop(this.name, this.index, this.startTime, this.endTime, this.lat_lng);
+  TripStop(this.name, this.index, this.startTime, this.endTime, this.latLng);
 
   factory TripStop.fromFirestore(Map data) {
     Timestamp startTime = data["startTime"] as Timestamp;
