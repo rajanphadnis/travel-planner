@@ -9,7 +9,11 @@ class TripScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(trip.name)),
+      appBar: AppBar(title: Text(trip.name), actions: [
+        IconButton(onPressed: () {
+          
+        }, icon: const Icon(Icons.add),),
+      ],),
       body: Center(
         child: Itinerary(trip),
       ),
