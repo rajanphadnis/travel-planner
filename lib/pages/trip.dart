@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/pages/add_stop.dart';
 import 'package:travel_planner/widgets/itinerary.dart';
 
 class TripScreen extends StatelessWidget {
@@ -9,11 +10,18 @@ class TripScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(trip.name), actions: [
-        IconButton(onPressed: () {
-          
-        }, icon: const Icon(Icons.add),),
-      ],),
+      appBar: AppBar(
+        title: Text(trip.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddStop(trip)));
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: Center(
         child: Itinerary(trip),
       ),

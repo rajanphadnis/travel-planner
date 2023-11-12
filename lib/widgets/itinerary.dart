@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/widgets/list_card.dart';
 
 class Itinerary extends StatefulWidget {
   final Trip trip;
@@ -12,6 +14,7 @@ class Itinerary extends StatefulWidget {
 
 class _ItineraryState extends State<Itinerary> {
   late List<Widget> _rows;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -22,29 +25,38 @@ class _ItineraryState extends State<Itinerary> {
 
   @override
   Widget build(BuildContext context) {
-    void _onReorder(int oldIndex, int newIndex) {
+    Future<void> _onReorder(int oldIndex, int newIndex) async {
       setState(() {
-        Widget row = _rows.removeAt(oldIndex);
-        _rows.insert(newIndex, row);
+        isLoading = true;
+      });
+      await widget.trip.updateStopOrder(oldIndex, newIndex);
+      setState(() {
+        isLoading = false;
       });
     }
 
     ScrollController _scrollController =
-        PrimaryScrollController.of(context) ?? ScrollController();
+        PrimaryScrollController.of(context);
 
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: <Widget>[
-        ReorderableSliverList(
-          delegate: ReorderableSliverChildBuilderDelegate(
-            (context, index) {
-              return Text(widget.trip.stops[index].name);
-            },
-            childCount: widget.trip.stops.length,
-          ),
-          onReorder: _onReorder,
-        ),
-      ],
-    );
+    return StreamBuilder<bool>(
+        stream: widget.trip.stream,
+        builder: (context, snapshot) {
+          return isLoading
+              ? const CircularProgressIndicator()
+              : CustomScrollView(
+                  controller: _scrollController,
+                  slivers: <Widget>[
+                    ReorderableSliverList(
+                      delegate: ReorderableSliverChildBuilderDelegate(
+                        (context, index) {
+                          return ListCard(widget.trip, index);
+                        },
+                        childCount: widget.trip.stops.length,
+                      ),
+                      onReorder: _onReorder,
+                    ),
+                  ],
+                );
+        });
   }
 }

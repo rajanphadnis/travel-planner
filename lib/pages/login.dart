@@ -49,6 +49,12 @@ class LoginScreen extends StatelessWidget {
                     signInWithGoogle();
                   },
                 ),
+                SignInButton(
+                  Buttons.anonymous,
+                  onPressed: () {
+                    // signInWithGoogle();
+                  },
+                ),
                 Container()
               ],
             ),
