@@ -53,10 +53,10 @@ jobs:
         needs: version-check
         steps:
             - uses: actions/checkout@v3
-            # - run: |
-            #     echo "${{ secrets.ANDROID_UPLOAD_KEY_KEYSTORE}}" > release.keystore.asc
-            #     gpg -d --passphrase "${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}" --batch release.keystore.asc > ${{ github.workspace }}/upload-keystore.jks
-            #     echo -e "storePassword=${{secrets.ANDROID_UPLOAD_KEY_PASSWORD}}\nkeyPassword=${{secrets.ANDROID_UPLOAD_KEY_PASSWORD}}\nkeyAlias=upload\nstoreFile=${{ github.workspace }}/upload-keystore.jks" > android/key.properties
+            - run: |
+                echo "${{ secrets.ANDROID_UPLOAD_KEY_KEYSTORE}}" > release.keystore.asc
+                gpg -d --passphrase "${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}" --batch release.keystore.asc > ${{ github.workspace }}/upload-keystore.jks
+                echo -e "storePassword=${{secrets.ANDROID_UPLOAD_KEY_PASSWORD}}\nkeyPassword=${{secrets.ANDROID_UPLOAD_KEY_PASSWORD}}\nkeyAlias=upload\nstoreFile=${{ github.workspace }}/upload-keystore.jks" > android/key.properties
             - name: Setup Flutter
               uses: actions/setup-java@v3
               with:
