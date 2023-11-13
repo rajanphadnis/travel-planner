@@ -1,4 +1,4 @@
-package com.example.travel_planner
+package com.rodojo.travel_planner
 
 import io.flutter.embedding.android.FlutterActivity
 

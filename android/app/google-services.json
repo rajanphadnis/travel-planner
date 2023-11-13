@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:859614483839:android:95c2455c85f69bd4bb764a",
+        "mobilesdk_app_id": "1:859614483839:android:ca9ab255f2e80e39bb764a",
         "android_client_info": {
-          "package_name": "com.example.travel_planner"
+          "package_name": "com.rodojo.travel_planner"
         }
       },
       "oauth_client": [
