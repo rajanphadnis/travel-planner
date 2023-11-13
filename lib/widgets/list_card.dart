@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';

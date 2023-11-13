@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
-import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/widgets/list_card.dart';
 
@@ -13,19 +12,11 @@ class Itinerary extends StatefulWidget {
 }
 
 class _ItineraryState extends State<Itinerary> {
-  late List<Widget> _rows;
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    _rows = List<Widget>.generate(50,
-        (int index) => Text('This is sliver child $index', textScaleFactor: 2));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    Future<void> _onReorder(int oldIndex, int newIndex) async {
+    Future<void> onReorder(int oldIndex, int newIndex) async {
       setState(() {
         isLoading = true;
       });
@@ -35,7 +26,7 @@ class _ItineraryState extends State<Itinerary> {
       });
     }
 
-    ScrollController _scrollController =
+    ScrollController scrollController =
         PrimaryScrollController.of(context);
 
     return StreamBuilder<bool>(
@@ -44,7 +35,7 @@ class _ItineraryState extends State<Itinerary> {
           return isLoading
               ? const CircularProgressIndicator()
               : CustomScrollView(
-                  controller: _scrollController,
+                  controller: scrollController,
                   slivers: <Widget>[
                     ReorderableSliverList(
                       delegate: ReorderableSliverChildBuilderDelegate(
@@ -53,7 +44,7 @@ class _ItineraryState extends State<Itinerary> {
                         },
                         childCount: widget.trip.stops.length,
                       ),
-                      onReorder: _onReorder,
+                      onReorder: onReorder,
                     ),
                   ],
                 );
