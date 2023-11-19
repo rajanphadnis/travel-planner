@@ -294,4 +294,20 @@ class Trip {
     completer.complete(true);
     return completer.future;
   }
+
+  Future<bool> deleteTransportation(TripTransportation toDelete) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+
+    transportation.remove(toDelete);
+    await docRef.update({
+      "transportation": generateUpdatedTransportation(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
 }
