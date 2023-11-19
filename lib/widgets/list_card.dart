@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/pages/add_accomodation.dart';
 import 'package:travel_planner/pages/add_stop.dart';
+import 'package:travel_planner/pages/add_transport.dart';
 import 'package:travel_planner/widgets/list_card_expand.dart';
 
 class ListCard extends StatelessWidget {
@@ -56,6 +58,11 @@ class ListCard extends StatelessWidget {
                               accomodation.placeID == stop.placeID)
                           .confirmationSlug ??
                       "",
+                  editRedirect: AddAccomodation(
+                    trip,
+                    accomodation: trip.accomodation.firstWhere(
+                        (accomodation) => accomodation.placeID == stop.placeID),
+                  ),
                 )
               : Container(),
           trip.transportation
@@ -79,6 +86,12 @@ class ListCard extends StatelessWidget {
                               transportation.startPlaceID == stop.placeID)
                           .flightTrackingSlug ??
                       "",
+                  editRedirect: AddTransport(
+                    trip,
+                    transportation: trip.transportation.firstWhere(
+                        (transportation) =>
+                            transportation.startPlaceID == stop.placeID),
+                  ),
                 )
               : Container(),
           trip.transportation
@@ -102,6 +115,12 @@ class ListCard extends StatelessWidget {
                               transportation.endPlaceID == stop.placeID)
                           .flightTrackingSlug ??
                       "",
+                  editRedirect: AddTransport(
+                    trip,
+                    transportation: trip.transportation.firstWhere(
+                        (transportation) =>
+                            transportation.endPlaceID == stop.placeID),
+                  ),
                 )
               : Container(),
         ],

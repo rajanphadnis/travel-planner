@@ -17,6 +17,7 @@ class AddAccomodation extends StatefulWidget {
 class _AddAccomodationState extends State<AddAccomodation> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final slugController = TextEditingController();
   DateTime selectedStartDate = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -66,6 +67,9 @@ class _AddAccomodationState extends State<AddAccomodation> {
       selectedStartDate = widget.accomodation!.startTime;
       selectedEndDate = widget.accomodation!.endTime;
       nameController.value = TextEditingValue(text: widget.accomodation!.name);
+      slugController.value =
+          TextEditingValue(text: widget.accomodation!.confirmationSlug ?? "");
+      accomodationType = widget.accomodation!.type;
     }
     tempStop = widget.accomodation == null
         ? widget.trip.stops.first
@@ -79,6 +83,7 @@ class _AddAccomodationState extends State<AddAccomodation> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
+    slugController.dispose();
     super.dispose();
   }
 
@@ -130,19 +135,79 @@ class _AddAccomodationState extends State<AddAccomodation> {
     );
   }
 
+  Future<void> _confirmDeleteDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Accomodation?"),
+          content: Text(
+              "Please confirm you'd like to delete the accomodation called '${nameController.value.text}'"),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Confirm'),
+              onPressed: () {
+                widget.trip
+                    .deleteAccomodation(widget.accomodation!)
+                    .then((value) {
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Accomodation"),
+        actions: [
+          widget.accomodation != null
+              ? IconButton(
+                  onPressed: () {
+                    _confirmDeleteDialog(context).then((value) {
+                      Navigator.pop(context);
+                    });
+                  },
+                  icon: const Icon(Icons.delete),
+                )
+              : Container(),
+        ],
       ),
       body: Form(
         key: _formKey,
         child: Center(
           child: Column(
             children: [
+              const Text("Accomodation Name:"),
               TextFormField(
                 controller: nameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              const Text("Confirmation Number:"),
+              TextFormField(
+                controller: slugController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -193,7 +258,7 @@ class _AddAccomodationState extends State<AddAccomodation> {
                       selectedStartDate,
                       selectedEndDate,
                       const GeoPoint(28.543091, -80.665339),
-                      null,
+                      slugController.value.text,
                     )
                         .then(
                       (value) {
@@ -210,7 +275,7 @@ class _AddAccomodationState extends State<AddAccomodation> {
                         selectedEndDate,
                         const GeoPoint(28.543091, -80.665339),
                         tripStop.placeID,
-                        confirmationSlug: null,
+                        confirmationSlug: slugController.value.text,
                       ),
                     )
                         .then(

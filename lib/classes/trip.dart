@@ -208,6 +208,21 @@ class Trip {
     return completer.future;
   }
 
+  Future<bool> deleteAccomodation(TripAccomodation toDelete) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    accomodation.remove(toDelete);
+    await docRef.update({
+      "accomodation": generateUpdatedAccomodations(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
   List<Map<String, dynamic>> generateUpdatedTransportation() {
     List<Map<String, dynamic>> toReturn = [];
     for (var i = 0; i < transportation.length; i++) {

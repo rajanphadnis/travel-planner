@@ -69,6 +69,7 @@ class _AddTransportState extends State<AddTransport> {
       selectedEndDate = widget.transportation!.endTime;
       nameController.value =
           TextEditingValue(text: widget.transportation!.name);
+      transportType = widget.transportation!.type;
     }
     startStop = widget.transportation == null
         ? widget.trip.stops.first

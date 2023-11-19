@@ -6,6 +6,7 @@ class ListCardExpand extends StatefulWidget {
   final String startTime;
   final String endTime;
   final String slug;
+  final Widget editRedirect;
   const ListCardExpand({
     super.key,
     required this.header,
@@ -13,6 +14,7 @@ class ListCardExpand extends StatefulWidget {
     required this.startTime,
     required this.endTime,
     required this.slug,
+    required this.editRedirect,
   });
 
   @override
@@ -69,6 +71,21 @@ class _ListCardExpandState extends State<ListCardExpand> {
                         style: const TextStyle(color: Colors.grey),
                       ),
                       Text(widget.slug)
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => widget.editRedirect,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.edit),
+                          label: const Text("Edit"))
                     ],
                   ),
                 ],
