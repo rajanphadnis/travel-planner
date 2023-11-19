@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/pages/add_accomodation.dart';
 import 'package:travel_planner/pages/add_stop.dart';
+import 'package:travel_planner/pages/add_transport.dart';
 import 'package:travel_planner/widgets/itinerary.dart';
 
 class TripScreen extends StatelessWidget {
@@ -18,7 +20,23 @@ class TripScreen extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AddStop(trip)));
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.location_on),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddTransport(trip)));
+            },
+            icon: const Icon(Icons.drive_eta),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddAccomodation(trip)));
+            },
+            icon: const Icon(Icons.hotel),
           ),
         ],
       ),

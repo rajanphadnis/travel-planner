@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';
 
 class AddStop extends StatefulWidget {
   final Trip trip;
-  const AddStop(this.trip, {super.key});
+  final TripStop? stop;
+  const AddStop(this.trip, {super.key, this.stop});
 
   @override
   State<AddStop> createState() => _AddStopState();
@@ -54,6 +56,16 @@ class _AddStopState extends State<AddStop> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.stop != null) {
+      selectedStartDate = widget.stop!.startTime;
+      selectedEndDate = widget.stop!.endTime;
+      nameController.value = TextEditingValue(text: widget.stop!.name);
+    }
+  }
+
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
@@ -94,12 +106,34 @@ class _AddStopState extends State<AddStop> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  widget.trip.addStop(
-                    nameController.value.text,
-                    selectedStartDate,
-                    selectedEndDate,
-                    const GeoPoint(28.543091, -80.665339),
-                  );
+                  if (widget.stop != null) {
+                    widget.trip
+                        .updateStop(
+                      widget.stop!.placeID,
+                      nameController.value.text,
+                      selectedStartDate,
+                      selectedEndDate,
+                      const GeoPoint(28.543091, -80.665339),
+                    )
+                        .then(
+                      (value) {
+                        Navigator.pop(context);
+                      },
+                    );
+                  } else {
+                    widget.trip
+                        .addStop(
+                      nameController.value.text,
+                      selectedStartDate,
+                      selectedEndDate,
+                      const GeoPoint(28.543091, -80.665339),
+                    )
+                        .then(
+                      (value) {
+                        Navigator.pop(context);
+                      },
+                    );
+                  }
                 },
                 child: const Text("Save"),
               ),

@@ -89,6 +89,28 @@ class Trip {
     return completer.future;
   }
 
+  Future<bool> updateStop(String placeID, String stopName, DateTime startTime,
+      DateTime endTime, GeoPoint latLng) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    final TripStop itemToUpdate =
+        stops.where((element) => element.placeID == placeID).first;
+    final int indexOfUpdatedItem = stops.indexOf(itemToUpdate);
+    final TripStop updatedItem = TripStop(
+        stopName, placeID, itemToUpdate.index, startTime, endTime, latLng);
+    stops.replaceRange(
+        indexOfUpdatedItem, indexOfUpdatedItem + 1, [updatedItem]);
+    await docRef.update({
+      "stops": generateUpdatedStops(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
   List<Map<String, dynamic>> generateUpdatedStops() {
     List<Map<String, dynamic>> toReturn = [];
     for (var i = 0; i < stops.length; i++) {
@@ -117,6 +139,141 @@ class Trip {
 
     await docRef.update({
       "stops": generateUpdatedStops(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  List<Map<String, dynamic>> generateUpdatedAccomodations() {
+    List<Map<String, dynamic>> toReturn = [];
+    for (var i = 0; i < accomodation.length; i++) {
+      TripAccomodation accom = accomodation[i];
+      Map<String, dynamic> toWrite = {
+        "name": accom.name,
+        "placeID": accom.placeID,
+        "type": accom.type.name,
+        "startTime": accom.startTime,
+        "endTime": accom.endTime,
+        "lat_lng": accom.latLng,
+        "confirmationSlug": accom.confirmationSlug ?? ""
+      };
+      toReturn.add(toWrite);
+    }
+    return toReturn;
+  }
+
+  Future<bool> addAccomodation(TripAccomodation newAccomodation) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    accomodation.add(newAccomodation);
+    await docRef.update({
+      "accomodation": generateUpdatedAccomodations(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  Future<bool> updateAccomodation(
+      TripAccomodation oldAccomodation,
+      TripStop stop,
+      Accomodation accomodationType,
+      String accomodationName,
+      DateTime startTime,
+      DateTime endTime,
+      GeoPoint latLng,
+      String? confirmationSlug) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    final TripAccomodation itemToUpdate =
+        accomodation.where((element) => element == oldAccomodation).first;
+    final int indexOfUpdatedItem = accomodation.indexOf(itemToUpdate);
+    final TripAccomodation updatedItem = TripAccomodation(accomodationName,
+        accomodationType, startTime, endTime, latLng, stop.placeID,
+        confirmationSlug: confirmationSlug);
+    accomodation.replaceRange(
+        indexOfUpdatedItem, indexOfUpdatedItem + 1, [updatedItem]);
+    await docRef.update({
+      "accomodation": generateUpdatedAccomodations(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  List<Map<String, dynamic>> generateUpdatedTransportation() {
+    List<Map<String, dynamic>> toReturn = [];
+    for (var i = 0; i < transportation.length; i++) {
+      TripTransportation transport = transportation[i];
+      Map<String, dynamic> toWrite = {
+        "name": transport.name,
+        "startPlaceID": transport.startPlaceID,
+        "endPlaceID": transport.endPlaceID,
+        "type": transport.type.name,
+        "startTime": transport.startTime,
+        "endTime": transport.endTime,
+        "confirmationSlug": transport.confirmationNumber ?? "",
+        "flightTrackingSlug": transport.flightTrackingSlug ?? ""
+      };
+      toReturn.add(toWrite);
+    }
+    return toReturn;
+  }
+
+  Future<bool> addTransportation(TripTransportation newTransportation) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    transportation.add(newTransportation);
+    await docRef.update({
+      "transportation": generateUpdatedTransportation(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  Future<bool> updateTransportation(
+      TripTransportation oldtransportation,
+      TripStop startingStop,
+      TripStop endingStop,
+      Transportation transportationType,
+      String transportationName,
+      DateTime startTime,
+      DateTime endTime,
+      GeoPoint latLng,
+      String? confirmationSlug,
+      String? flightTrackingSlug) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    final TripTransportation itemToUpdate =
+        transportation.where((element) => element == oldtransportation).first;
+    final int indexOfUpdatedItem = transportation.indexOf(itemToUpdate);
+    final TripTransportation updatedItem = TripTransportation(
+        transportationName,
+        transportationType,
+        startTime,
+        endTime,
+        startingStop.placeID,
+        endingStop.placeID,
+        flightTrackingSlug: flightTrackingSlug,
+        confirmationNumber: confirmationSlug);
+    transportation.replaceRange(
+        indexOfUpdatedItem, indexOfUpdatedItem + 1, [updatedItem]);
+    await docRef.update({
+      "transportation": generateUpdatedTransportation(),
     });
     _stream.add(true);
     completer.complete(true);

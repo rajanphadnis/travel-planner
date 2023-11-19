@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/pages/add_stop.dart';
 import 'package:travel_planner/widgets/list_card_expand.dart';
 
 class ListCard extends StatelessWidget {
@@ -59,11 +60,11 @@ class ListCard extends StatelessWidget {
               : Container(),
           trip.transportation
                   .where((transportation) =>
-                      transportation.endPlaceID == stop.placeID)
+                      transportation.startPlaceID == stop.placeID)
                   .isNotEmpty
               ? ListCardExpand(
                   header: Text(
-                      "Arriving by: ${trip.transportation.firstWhere((transportation) => transportation.startPlaceID == stop.placeID).name}"),
+                      "Departing by: ${trip.transportation.firstWhere((transportation) => transportation.startPlaceID == stop.placeID).name}"),
                   isTravel: true,
                   startTime: trip.transportation
                       .firstWhere((transportation) =>
@@ -82,11 +83,11 @@ class ListCard extends StatelessWidget {
               : Container(),
           trip.transportation
                   .where((transportation) =>
-                      transportation.startPlaceID == stop.placeID)
+                      transportation.endPlaceID == stop.placeID)
                   .isNotEmpty
               ? ListCardExpand(
                   header: Text(
-                      "Departing by: ${trip.transportation.firstWhere((transportation) => transportation.endPlaceID == stop.placeID).name}"),
+                      "Arriving by: ${trip.transportation.firstWhere((transportation) => transportation.endPlaceID == stop.placeID).name}"),
                   isTravel: true,
                   startTime: trip.transportation
                       .firstWhere((transportation) =>
@@ -104,6 +105,20 @@ class ListCard extends StatelessWidget {
                 )
               : Container(),
         ],
+      ),
+      trailing: IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddStop(
+                trip,
+                stop: stop,
+              ),
+            ),
+          );
+        },
+        icon: const Icon(Icons.edit),
       ),
     );
   }

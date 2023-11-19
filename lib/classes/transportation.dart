@@ -21,7 +21,7 @@ class TripTransportation {
   factory TripTransportation.fromFirestore(Map data) {
     Timestamp startTime = data["startTime"] as Timestamp;
     Timestamp endTime = data["endTime"] as Timestamp;
-    String confirmation = data["confirmation"];
+    String confirmation = data["confirmationSlug"];
     String flightTrackingSlug = data["flightTrackingSlug"];
     Transportation type = Transportation.values.byName(data["type"]);
     String startPlaceID = data["startPlaceID"];

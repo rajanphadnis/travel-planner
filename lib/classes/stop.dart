@@ -12,10 +12,9 @@ class TripStop {
   TripStop(this.name, this.placeID, this.index, this.startTime, this.endTime,
       this.latLng);
 
-  
-
   String get formattedStartDate => formatDate(startTime);
   String get formattedEndDate => formatDate(endTime);
+  String get dropdownEntry => "$name ($formattedStartDate - $formattedEndDate)";
 
   factory TripStop.fromFirestore(Map data) {
     Timestamp startTime = data["startTime"] as Timestamp;
