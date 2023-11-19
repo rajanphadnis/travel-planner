@@ -32,5 +32,6 @@ String formatDateAndTime(DateTime date, String delineator) {
       date.hour > 12 ? (date.hour - 12).toString() : date.hour.toString();
   String minute = date.minute.toString().padLeft(2, "0");
   String hourSymbol = date.hour > 12 ? "PM" : "AM";
-  return "$month/$day/$year $delineator $hour:$minute $hourSymbol";
+  String timezone = date.timeZoneOffset.inHours.toString();
+  return "$month/$day/$year $delineator $hour:$minute $hourSymbol $timezone";
 }

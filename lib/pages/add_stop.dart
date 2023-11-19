@@ -72,11 +72,60 @@ class _AddStopState extends State<AddStop> {
     super.dispose();
   }
 
+  Future<void> _confirmDeleteDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Stop?"),
+          content: Text(
+              "Please confirm you'd like to delete the stop called '${nameController.value.text}'. This will also delete all transport and accomdations associated with this stop."),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Confirm'),
+              onPressed: () {
+                widget.trip
+                    .deleteStop(widget.stop!)
+                    .then((value) {
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Stop"),
+        actions: [
+          widget.stop != null
+              ? IconButton(
+                  onPressed: () {
+                    _confirmDeleteDialog(context).then((value) {
+                      Navigator.pop(context);
+                    });
+                  },
+                  icon: const Icon(Icons.delete),
+                )
+              : Container(),
+        ],
       ),
       body: Form(
         key: _formKey,

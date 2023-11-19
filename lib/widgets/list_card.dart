@@ -24,7 +24,7 @@ class ListCard extends StatelessWidget {
         children: [
           Text(stop.name),
           Text(
-            " (${stop.formattedStartDate} - ${stop.formattedEndDate})",
+            " (${stop.formattedStartDate}${stop.formattedStartDate == stop.formattedEndDate ? ")" : "- ${stop.formattedEndDate})"}",
             style: const TextStyle(
               color: Colors.grey,
             ),
@@ -67,35 +67,6 @@ class ListCard extends StatelessWidget {
               : Container(),
           trip.transportation
                   .where((transportation) =>
-                      transportation.startPlaceID == stop.placeID)
-                  .isNotEmpty
-              ? ListCardExpand(
-                  header: Text(
-                      "Departing by: ${trip.transportation.firstWhere((transportation) => transportation.startPlaceID == stop.placeID).name}"),
-                  isTravel: true,
-                  startTime: trip.transportation
-                      .firstWhere((transportation) =>
-                          transportation.startPlaceID == stop.placeID)
-                      .formattedStartTime,
-                  endTime: trip.transportation
-                      .firstWhere((transportation) =>
-                          transportation.startPlaceID == stop.placeID)
-                      .formattedEndTime,
-                  slug: trip.transportation
-                          .firstWhere((transportation) =>
-                              transportation.startPlaceID == stop.placeID)
-                          .flightTrackingSlug ??
-                      "",
-                  editRedirect: AddTransport(
-                    trip,
-                    transportation: trip.transportation.firstWhere(
-                        (transportation) =>
-                            transportation.startPlaceID == stop.placeID),
-                  ),
-                )
-              : Container(),
-          trip.transportation
-                  .where((transportation) =>
                       transportation.endPlaceID == stop.placeID)
                   .isNotEmpty
               ? ListCardExpand(
@@ -120,6 +91,35 @@ class ListCard extends StatelessWidget {
                     transportation: trip.transportation.firstWhere(
                         (transportation) =>
                             transportation.endPlaceID == stop.placeID),
+                  ),
+                )
+              : Container(),
+          trip.transportation
+                  .where((transportation) =>
+                      transportation.startPlaceID == stop.placeID)
+                  .isNotEmpty
+              ? ListCardExpand(
+                  header: Text(
+                      "Departing by: ${trip.transportation.firstWhere((transportation) => transportation.startPlaceID == stop.placeID).name}"),
+                  isTravel: true,
+                  startTime: trip.transportation
+                      .firstWhere((transportation) =>
+                          transportation.startPlaceID == stop.placeID)
+                      .formattedStartTime,
+                  endTime: trip.transportation
+                      .firstWhere((transportation) =>
+                          transportation.startPlaceID == stop.placeID)
+                      .formattedEndTime,
+                  slug: trip.transportation
+                          .firstWhere((transportation) =>
+                              transportation.startPlaceID == stop.placeID)
+                          .flightTrackingSlug ??
+                      "",
+                  editRedirect: AddTransport(
+                    trip,
+                    transportation: trip.transportation.firstWhere(
+                        (transportation) =>
+                            transportation.startPlaceID == stop.placeID),
                   ),
                 )
               : Container(),

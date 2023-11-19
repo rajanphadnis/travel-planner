@@ -63,6 +63,30 @@ class Trip {
     );
   }
 
+  Future<bool> deleteStop(TripStop stopToDelete) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    final String placeIDToDelete = stopToDelete.placeID;
+    stops.removeWhere((stop) => stop.placeID == placeIDToDelete);
+    accomodation
+        .removeWhere((accomodation) => accomodation.placeID == placeIDToDelete);
+    transportation.removeWhere(
+        (transportation) => transportation.endPlaceID == placeIDToDelete);
+    transportation.removeWhere(
+        (transportation) => transportation.startPlaceID == placeIDToDelete);
+    await docRef.update({
+      "stops": generateUpdatedStops(),
+      "accomodation": generateUpdatedAccomodations(),
+      "transportation": generateUpdatedTransportation(),
+    });
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
   Future<bool> addStop(String stopName, DateTime startTime, DateTime endTime,
       GeoPoint latLng) async {
     final Completer<bool> completer = Completer();
