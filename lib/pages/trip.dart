@@ -3,6 +3,7 @@ import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/pages/add_accomodation.dart';
 import 'package:travel_planner/pages/add_stop.dart';
 import 'package:travel_planner/pages/add_transport.dart';
+import 'package:travel_planner/pages/add_trip.dart';
 import 'package:travel_planner/widgets/itinerary.dart';
 
 class TripScreen extends StatelessWidget {
@@ -13,19 +14,44 @@ class TripScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(trip.name),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(trip.name),
+            Text(
+              " (${trip.formattedStartDate})",
+              style: const TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddStop(trip)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddTrip(trip: trip)));
+            },
+            icon: const Icon(Icons.edit),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddStop(trip)));
             },
             icon: const Icon(Icons.location_on),
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddTransport(trip)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddTransport(trip)));
             },
             icon: const Icon(Icons.drive_eta),
           ),

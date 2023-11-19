@@ -9,15 +9,16 @@ import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/transportation.dart';
 
 class Trip {
-  final String name;
+  String name;
   final String docID;
-  final DateTime tripStartTime;
+  DateTime tripStartTime;
   final List<TripStop> stops;
   final List<TripTransportation> transportation;
   final List<TripAccomodation> accomodation;
 
   final StreamController<bool> _stream = StreamController<bool>.broadcast();
   Stream<bool> get stream => _stream.stream;
+  String get formattedStartDate => formatDate(tripStartTime);
 
   Trip(this.name, this.docID, this.tripStartTime, this.stops,
       this.transportation, this.accomodation);
@@ -61,6 +62,35 @@ class Trip {
       transportation(),
       accomodation(),
     );
+  }
+
+  Future<bool> deleteTrip() async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    await docRef.delete();
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  Future<bool> updateTrip(String newName, DateTime newStartDate) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    await docRef.update({
+      "name": newName,
+      "startTime": newStartDate,
+    });
+    name = newName;
+    tripStartTime = newStartDate;
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
   }
 
   Future<bool> deleteStop(TripStop stopToDelete) async {

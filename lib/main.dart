@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/firebase_options.dart';
+import 'package:travel_planner/pages/add_trip.dart';
 import 'package:travel_planner/pages/login.dart';
 import 'package:travel_planner/pages/trip_list.dart';
 
@@ -60,6 +61,14 @@ class MyHomePage extends StatelessWidget {
               ],
             ),
             body: const Center(child: TripList()),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const AddTrip()));
+                },
+                child: const Text("Create New Trip")),
           );
         }
       },
