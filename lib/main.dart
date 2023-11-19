@@ -64,11 +64,12 @@ class MyHomePage extends StatelessWidget {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const AddTrip()));
-                },
-                child: const Text("Create New Trip")),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AddTrip()));
+              },
+              child: const Text("Create New Trip"),
+            ),
           );
         }
       },
