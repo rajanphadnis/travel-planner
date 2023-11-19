@@ -23,3 +23,14 @@ String formatDate(DateTime date) {
   String day = date.day.toString();
   return "$month/$day/$year";
 }
+
+String formatDateAndTime(DateTime date, String delineator) {
+  String year = date.year.toString().substring(2);
+  String month = date.month.toString();
+  String day = date.day.toString();
+  String hour =
+      date.hour > 12 ? (date.hour - 12).toString() : date.hour.toString();
+  String minute = date.minute.toString().padLeft(2, "0");
+  String hourSymbol = date.hour > 12 ? "PM" : "AM";
+  return "$month/$day/$year $delineator $hour:$minute $hourSymbol";
+}

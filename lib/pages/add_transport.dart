@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/stop.dart';
 import 'package:travel_planner/classes/transportation.dart';
 import 'package:travel_planner/classes/trip.dart';
@@ -38,27 +41,55 @@ class _AddTransportState extends State<AddTransport> {
   Transportation transportType = Transportation.ownCar;
 
   Future<void> _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedEndDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedEndDate) {
+    picked ??= DateTime.now();
+    final TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(picked),
+    );
+    final DateTime toSet = selectedTime == null
+        ? picked
+        : DateTime(
+            picked.year,
+            picked.month,
+            picked.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
+    if (picked != selectedEndDate) {
       setState(() {
-        selectedEndDate = picked;
+        selectedEndDate = toSet;
       });
     }
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedStartDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedStartDate) {
+    picked ??= DateTime.now();
+    final TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(picked),
+    );
+    final DateTime toSet = selectedTime == null
+        ? picked
+        : DateTime(
+            picked.year,
+            picked.month,
+            picked.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
+    if (picked != selectedEndDate) {
       setState(() {
-        selectedStartDate = picked;
+        selectedStartDate = toSet;
       });
     }
   }
@@ -253,13 +284,13 @@ class _AddTransportState extends State<AddTransport> {
                 onPressed: () => _selectStartDate(context),
                 icon: const Icon(Icons.calendar_today),
                 label: Text(
-                    "Depart: ${selectedStartDate.toLocal().toString().split(" ")[0]}"),
+                    "Depart: ${formatDateAndTime(selectedStartDate, '@')}"),
               ),
               ElevatedButton.icon(
                 onPressed: () => _selectEndDate(context),
                 icon: const Icon(Icons.calendar_today),
-                label: Text(
-                    "Arrive: ${selectedEndDate.toLocal().toString().split(" ")[0]}"),
+                label:
+                    Text("Arrive: ${formatDateAndTime(selectedEndDate, '@')}"),
               ),
               DropdownMenu<Transportation>(
                 initialSelection: transportType,

@@ -15,8 +15,8 @@ class TripTransportation {
       this.startPlaceID, this.endPlaceID,
       {this.flightTrackingSlug, this.confirmationNumber});
 
-  String get formattedStartTime => formatDate(startTime);
-  String get formattedEndTime => formatDate(endTime);
+  String get formattedStartTime => formatDateAndTime(startTime, "@");
+  String get formattedEndTime => formatDateAndTime(endTime, "@");
 
   factory TripTransportation.fromFirestore(Map data) {
     Timestamp startTime = data["startTime"] as Timestamp;
