@@ -17,6 +17,8 @@ class AddTransport extends StatefulWidget {
 class _AddTransportState extends State<AddTransport> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final confirmationSlugController = TextEditingController();
+  final flightSlugController = TextEditingController();
   DateTime selectedStartDate = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -69,6 +71,10 @@ class _AddTransportState extends State<AddTransport> {
       selectedEndDate = widget.transportation!.endTime;
       nameController.value =
           TextEditingValue(text: widget.transportation!.name);
+      flightSlugController.value = TextEditingValue(
+          text: widget.transportation!.flightTrackingSlug ?? "");
+      confirmationSlugController.value = TextEditingValue(
+          text: widget.transportation!.confirmationNumber ?? "");
       transportType = widget.transportation!.type;
     }
     startStop = widget.transportation == null
@@ -91,6 +97,8 @@ class _AddTransportState extends State<AddTransport> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
+    flightSlugController.dispose();
+    confirmationSlugController.dispose();
     super.dispose();
   }
 
@@ -151,19 +159,89 @@ class _AddTransportState extends State<AddTransport> {
     );
   }
 
+  Future<void> _confirmDeleteDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Transportation?"),
+          content: Text(
+              "Please confirm you'd like to delete the transportation called '${nameController.value.text}'"),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Confirm'),
+              onPressed: () {
+                widget.trip
+                    .deleteTransportation(widget.transportation!)
+                    .then((value) {
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Transportation"),
+        actions: [
+          widget.transportation != null
+              ? IconButton(
+                  onPressed: () {
+                    _confirmDeleteDialog(context).then((value) {
+                      Navigator.pop(context);
+                    });
+                  },
+                  icon: const Icon(Icons.delete),
+                )
+              : Container(),
+        ],
       ),
       body: Form(
         key: _formKey,
         child: Center(
           child: Column(
             children: [
+              const Text("Transportation Name:"),
               TextFormField(
                 controller: nameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              const Text("Flight Number:"),
+              TextFormField(
+                controller: flightSlugController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              const Text("Confirmation Number:"),
+              TextFormField(
+                controller: confirmationSlugController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -221,8 +299,8 @@ class _AddTransportState extends State<AddTransport> {
                       selectedStartDate,
                       selectedEndDate,
                       const GeoPoint(28.543091, -80.665339),
-                      null,
-                      null,
+                      confirmationSlugController.value.text,
+                      flightSlugController.value.text,
                     )
                         .then(
                       (value) {
@@ -239,8 +317,9 @@ class _AddTransportState extends State<AddTransport> {
                         selectedEndDate,
                         startStop.placeID,
                         endStop.placeID,
-                        confirmationNumber: null,
-                        flightTrackingSlug: null,
+                        confirmationNumber:
+                            confirmationSlugController.value.text,
+                        flightTrackingSlug: flightSlugController.value.text,
                       ),
                     )
                         .then(
