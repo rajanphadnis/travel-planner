@@ -240,7 +240,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          append_body: true
           generate_release_notes: true
+          body_path: CHANGELOG.md
           files: |
             build/release/app-release.apk
             build/release/web-zip-release.zip
