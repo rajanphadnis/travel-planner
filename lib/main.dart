@@ -62,7 +62,7 @@ class MyHomePage extends StatelessWidget {
             ),
             body: const Center(child: TripList()),
             floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
+                FloatingActionButtonLocation.centerDocked,
             floatingActionButton: ElevatedButton(
               onPressed: () {
                 Navigator.push(context,

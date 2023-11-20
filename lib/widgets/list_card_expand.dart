@@ -39,7 +39,14 @@ class _ListCardExpandState extends State<ListCardExpand> {
                   ? const Icon(Icons.keyboard_arrow_up)
                   : const Icon(Icons.keyboard_arrow_down),
             ),
-            widget.header,
+            InkWell(
+              onTap: () {
+                setState(() {
+                  isOpen = !isOpen;
+                });
+              },
+              child: widget.header,
+            ),
           ],
         ),
         !isOpen
