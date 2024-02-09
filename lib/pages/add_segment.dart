@@ -350,6 +350,8 @@ class _AddSegmentState extends State<AddSegment> {
                           debugPrint("default update");
                       }
                     }
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: const Text("Save"),
                 ),

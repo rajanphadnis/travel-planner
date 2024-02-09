@@ -5,9 +5,9 @@ import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/pages/add_segment.dart';
 import 'package:travel_planner/widgets/day_title.dart';
-import 'package:travel_planner/widgets/flight_card.dart';
-import 'package:travel_planner/widgets/layover_card.dart';
-import 'package:travel_planner/widgets/lodging_card.dart';
+import 'package:travel_planner/widgets/cards/flight_card.dart';
+import 'package:travel_planner/widgets/cards/layover_card.dart';
+import 'package:travel_planner/widgets/cards/lodging_card.dart';
 
 class Itinerary extends StatefulWidget {
   final Trip trip;
@@ -26,7 +26,7 @@ class _ItineraryState extends State<Itinerary> {
         stream: widget.trip.stream,
         builder: (context, snapshot) {
           List<Widget> itineraryList = [
-            const DayTitle(),
+            DayTitle(DateTime(2024, 5, 4)),
           ];
           for (var segment in widget.trip.segments) {
             switch (segment.type) {

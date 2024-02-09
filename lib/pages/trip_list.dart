@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/trip.dart';
-import 'package:travel_planner/widgets/trip_card.dart';
+import 'package:travel_planner/widgets/cards/trip_card.dart';
 
 class TripList extends StatelessWidget {
   const TripList({super.key});

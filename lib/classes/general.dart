@@ -4,6 +4,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+List<String> months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
 bool isMobile(BuildContext context) {
   if (MediaQuery.of(context).size.width >= 600) {
     return false;
@@ -69,6 +84,7 @@ extension SegmentTypeProperties on SegmentType {
         return "";
     }
   }
+
   String get nameInputString {
     switch (this) {
       case SegmentType.flight:
@@ -81,6 +97,7 @@ extension SegmentTypeProperties on SegmentType {
         return "";
     }
   }
+
   bool get isLodging {
     switch (this) {
       case SegmentType.hotel:

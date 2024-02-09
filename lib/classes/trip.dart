@@ -165,4 +165,33 @@ class Trip {
       return true;
     });
   }
+
+  Future<bool> deleteTrip() async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    await docRef.delete();
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
+
+  Future<bool> updateTrip(String newName, DateTime newStartDate) async {
+    final Completer<bool> completer = Completer();
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference<Map<String, dynamic>> docRef =
+        db.collection("users/${user.uid}/activeTrips").doc(docID);
+    await docRef.update({
+      "name": newName,
+      "startTime": newStartDate,
+    });
+    name = newName;
+    tripStartTime = newStartDate;
+    _stream.add(true);
+    completer.complete(true);
+    return completer.future;
+  }
 }

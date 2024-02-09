@@ -26,46 +26,6 @@ class TripScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     IconButton(
-          //       // iconSize: ,
-          //       onPressed: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => AddTrip(trip: trip)));
-          //       },
-          //       icon: const Icon(Icons.edit),
-          //     ),
-          //     IconButton(
-          //       onPressed: () {
-          //         Navigator.push(context,
-          //             MaterialPageRoute(builder: (context) => AddStop(trip)));
-          //       },
-          //       icon: const Icon(Icons.location_on),
-          //     ),
-          //     IconButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => AddTransport(trip)));
-          //       },
-          //       icon: const Icon(Icons.drive_eta),
-          //     ),
-          //     IconButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => AddAccomodation(trip)));
-          //       },
-          //       icon: const Icon(Icons.hotel),
-          //     ),
-          //   ],
-          // ),
           Expanded(
             child: Itinerary(trip),
           ),

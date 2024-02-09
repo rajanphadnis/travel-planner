@@ -25,7 +25,7 @@ class CarCard extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              Text("Hilton - LAX", style: AppTextStyle.itineraryLodgingName),
+              Text("Hertz - Compact", style: AppTextStyle.itineraryLodgingName),
             ],
           ),
           Row(
