@@ -1,3 +1,10 @@
+## v0.0.5
+Re-org and started new design
+
+### Changed
+- Removed a bunch of dead code
+- Started work on new UX and filtering
+
 ## v0.0.4
 Initial play store release
 
