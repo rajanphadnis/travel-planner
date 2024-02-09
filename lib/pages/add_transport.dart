@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/general.dart';
-import 'package:travel_planner/classes/stop.dart';
-import 'package:travel_planner/classes/transportation.dart';
-import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/classes/stop_legacy.dart';
+import 'package:travel_planner/classes/transportation_legacy.dart';
+import 'package:travel_planner/classes/trip_legacy.dart';
 
 class AddTransport extends StatefulWidget {
-  final Trip trip;
+  final TripLegacy trip;
   final TripTransportation? transportation;
   const AddTransport(this.trip, {super.key, this.transportation});
 

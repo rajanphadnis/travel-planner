@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
         return await FirebaseAuth.instance.signInWithCredential(credential);
       }
     }
-
+    
     return Scaffold(
       body: Container(
         color: Theme.of(context).scaffoldBackgroundColor,

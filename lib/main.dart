@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/firebase_options.dart';
+import 'package:travel_planner/misc_theme_data.dart';
 import 'package:travel_planner/pages/add_trip.dart';
 import 'package:travel_planner/pages/login.dart';
 import 'package:travel_planner/pages/trip_list.dart';
@@ -21,14 +22,7 @@ class TravelPlanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Simple Travel Planner',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-          background: Colors.black87,
-        ),
-        useMaterial3: true,
-      ),
+      theme: appTheme,
       home: const MyHomePage(title: 'Travel Planner'),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/classes/trip_legacy.dart';
 
 class AddTrip extends StatefulWidget {
-  final Trip? trip;
+  final TripLegacy? trip;
   const AddTrip({super.key, this.trip});
 
   @override

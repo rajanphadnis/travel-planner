@@ -1,15 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:travel_planner/classes/stop.dart';
-import 'package:travel_planner/classes/trip.dart';
+import 'package:travel_planner/classes/stop_legacy.dart';
+import 'package:travel_planner/classes/trip_legacy.dart';
 import 'package:travel_planner/pages/add_accomodation.dart';
-import 'package:travel_planner/pages/add_stop.dart';
 import 'package:travel_planner/pages/add_transport.dart';
 import 'package:travel_planner/widgets/list_card_expand.dart';
 
 class ListCard extends StatelessWidget {
-  final Trip trip;
+  final TripLegacy trip;
   final int index;
   ListCard(this.trip, this.index, {super.key});
   bool isOpen = false;
@@ -127,15 +126,15 @@ class ListCard extends StatelessWidget {
       ),
       trailing: IconButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddStop(
-                trip,
-                stop: stop,
-              ),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => AddStop(
+          //       trip,
+          //       stop: stop,
+          //     ),
+          //   ),
+          // );
         },
         icon: const Icon(Icons.edit),
       ),
