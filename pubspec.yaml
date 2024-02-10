@@ -1,6 +1,6 @@
 name: travel_planner
 description: A simple travel planner
-version: 0.0.5+5
+version: 0.0.6+6
 environment:
   sdk: '>=2.18.6 <4.0.0'
 

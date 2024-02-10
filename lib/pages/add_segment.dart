@@ -58,7 +58,7 @@ class _AddSegmentState extends State<AddSegment> {
             selectedTime.hour,
             selectedTime.minute,
           );
-    if (picked != selectedEndDate) {
+    if (toSet != selectedEndDate) {
       setState(() {
         selectedEndDate = toSet;
       });
@@ -87,7 +87,7 @@ class _AddSegmentState extends State<AddSegment> {
             selectedTime.hour,
             selectedTime.minute,
           );
-    if (picked != selectedEndDate) {
+    if (toSet != selectedStartDate) {
       setState(() {
         selectedStartDate = toSet;
       });
@@ -350,7 +350,6 @@ class _AddSegmentState extends State<AddSegment> {
                           debugPrint("default update");
                       }
                     }
-                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child: const Text("Save"),

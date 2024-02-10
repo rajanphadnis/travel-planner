@@ -112,6 +112,7 @@ class Trip {
     }
 
     return batch.commit().then((value) {
+      _stream.add(true);
       return true;
     });
   }
@@ -135,6 +136,7 @@ class Trip {
     return ref.update({
       "trip": FieldValue.arrayUnion([newSegment])
     }).then((value) {
+      _stream.add(true);
       return true;
     });
   }
@@ -162,6 +164,7 @@ class Trip {
     return ref.update({
       "trip": FieldValue.arrayRemove([foundSegment])
     }).then((value) {
+      _stream.add(true);
       return true;
     });
   }

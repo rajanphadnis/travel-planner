@@ -1,3 +1,9 @@
+## v0.0.6
+Added QoL improvements and date headers
+
+### Changed
+- 
+
 ## v0.0.5
 Re-org and started new design
 

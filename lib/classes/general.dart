@@ -69,7 +69,9 @@ String formatDateAndTime(DateTime date, String delineator) {
   return "$month/$day/$year $delineator $hour:$minute $hourSymbol $timezone";
 }
 
-enum SegmentType { flight, hotel, airBNB, roadTrip, rentalCar, SPACE, LAYOVER }
+enum SegmentType { flight, hotel, airBNB, roadTrip, rentalCar, 
+// SPACE, LAYOVER
+ }
 
 extension SegmentTypeProperties on SegmentType {
   String get readableName {
