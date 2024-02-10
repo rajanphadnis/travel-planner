@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/classes/general.dart';
+import 'package:travel_planner/classes/ground_transport.dart';
 import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
 
@@ -20,8 +21,8 @@ class AddSegment extends StatefulWidget {
 class _AddSegmentState extends State<AddSegment> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
-  final flightStartController = TextEditingController();
-  final flightEndController = TextEditingController();
+  final startingPointController = TextEditingController();
+  final endingPointController = TextEditingController();
   SegmentType selectedType = SegmentType.flight;
   DateTime selectedStartDate = DateTime(
     DateTime.now().year,
@@ -107,9 +108,9 @@ class _AddSegmentState extends State<AddSegment> {
         case SegmentType.flight:
           nameController.value =
               TextEditingValue(text: (provided as Flight).flightNumber);
-          flightStartController.value =
+          startingPointController.value =
               TextEditingValue(text: provided.startAirport);
-          flightEndController.value =
+          endingPointController.value =
               TextEditingValue(text: provided.endAirport);
           break;
         case SegmentType.airBNB: // empty on purpose
@@ -127,8 +128,8 @@ class _AddSegmentState extends State<AddSegment> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
-    flightStartController.dispose();
-    flightEndController.dispose();
+    startingPointController.dispose();
+    endingPointController.dispose();
     super.dispose();
   }
 
@@ -235,24 +236,66 @@ class _AddSegmentState extends State<AddSegment> {
                         },
                       ),
                     ),
+                    ListTile(
+                      title: const Text('Bus'),
+                      leading: Radio<SegmentType>(
+                        value: SegmentType.bus,
+                        groupValue: selectedType,
+                        onChanged: (SegmentType? value) {
+                          setState(() {
+                            selectedType = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Roadtrip'),
+                      leading: Radio<SegmentType>(
+                        value: SegmentType.roadTrip,
+                        groupValue: selectedType,
+                        onChanged: (SegmentType? value) {
+                          setState(() {
+                            selectedType = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Rental Car'),
+                      leading: Radio<SegmentType>(
+                        value: SegmentType.rentalCar,
+                        groupValue: selectedType,
+                        onChanged: (SegmentType? value) {
+                          setState(() {
+                            selectedType = value!;
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
-                Text(selectedType.nameInputString),
-                TextFormField(
-                  controller: nameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                selectedType == SegmentType.flight
+                selectedType != SegmentType.roadTrip
+                    ? Text(selectedType.nameInputString)
+                    : Container(),
+                selectedType != SegmentType.roadTrip
+                    ? TextFormField(
+                        controller: nameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      )
+                    : Container(),
+                !selectedType.isLodging
                     ? Column(
                         children: [
-                          const Text("Starting Airport Code:"),
+                          Text(selectedType == SegmentType.flight
+                              ? "Departure Airport Code:"
+                              : "Departure:"),
                           TextFormField(
-                            controller: flightStartController,
+                            controller: startingPointController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -260,9 +303,11 @@ class _AddSegmentState extends State<AddSegment> {
                               return null;
                             },
                           ),
-                          const Text("Ending Airport Code:"),
+                          Text(selectedType == SegmentType.flight
+                              ? "Destination Airport Code:"
+                              : "Destination:"),
                           TextFormField(
-                            controller: flightEndController,
+                            controller: endingPointController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -291,8 +336,8 @@ class _AddSegmentState extends State<AddSegment> {
                       switch (selectedType) {
                         case SegmentType.flight:
                           widget.trip.createSegment(Flight(
-                              startAirport: flightStartController.value.text,
-                              endAirport: flightEndController.value.text,
+                              startAirport: startingPointController.value.text,
+                              endAirport: endingPointController.value.text,
                               flightNumber: nameController.value.text,
                               id: genRandomString(10),
                               type: SegmentType.flight,
@@ -315,6 +360,36 @@ class _AddSegmentState extends State<AddSegment> {
                               endTime: selectedEndDate,
                               id: genRandomString(10)));
                           break;
+                        case SegmentType.rentalCar:
+                          widget.trip.createSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: nameController.value.text,
+                              type: SegmentType.rentalCar,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
+                          break;
+                        case SegmentType.roadTrip:
+                          widget.trip.createSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: "Roadtrip",
+                              type: SegmentType.roadTrip,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
+                          break;
+                        case SegmentType.bus:
+                          widget.trip.createSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: nameController.value.text,
+                              type: SegmentType.bus,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
+                          break;
                         default:
                           debugPrint("default create new");
                       }
@@ -322,8 +397,8 @@ class _AddSegmentState extends State<AddSegment> {
                       switch (selectedType) {
                         case SegmentType.flight:
                           widget.trip.updateSegment(Flight(
-                              startAirport: flightStartController.value.text,
-                              endAirport: flightEndController.value.text,
+                              startAirport: startingPointController.value.text,
+                              endAirport: endingPointController.value.text,
                               flightNumber: nameController.value.text,
                               id: widget.id,
                               type: SegmentType.flight,
@@ -345,6 +420,36 @@ class _AddSegmentState extends State<AddSegment> {
                               startTime: selectedStartDate,
                               endTime: selectedEndDate,
                               id: widget.id));
+                          break;
+                        case SegmentType.rentalCar:
+                          widget.trip.updateSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: nameController.value.text,
+                              type: SegmentType.rentalCar,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
+                          break;
+                        case SegmentType.roadTrip:
+                          widget.trip.updateSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: "Roadtrip",
+                              type: SegmentType.roadTrip,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
+                          break;
+                        case SegmentType.bus:
+                          widget.trip.updateSegment(GroundTransport(
+                              start: startingPointController.value.text,
+                              end: endingPointController.value.text,
+                              name: nameController.value.text,
+                              type: SegmentType.bus,
+                              startTime: selectedStartDate,
+                              endTime: selectedEndDate,
+                              id: genRandomString(10)));
                           break;
                         default:
                           debugPrint("default update");

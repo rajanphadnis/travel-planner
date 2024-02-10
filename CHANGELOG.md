@@ -2,7 +2,9 @@
 Added QoL improvements and date headers
 
 ### Changed
-- 
+- added busses, roadtrips, and rental cars
+- fixed formatting
+- reorg
 
 ## v0.0.5
 Re-org and started new design

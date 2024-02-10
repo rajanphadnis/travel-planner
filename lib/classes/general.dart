@@ -69,9 +69,14 @@ String formatDateAndTime(DateTime date, String delineator) {
   return "$month/$day/$year $delineator $hour:$minute $hourSymbol $timezone";
 }
 
-enum SegmentType { flight, hotel, airBNB, roadTrip, rentalCar, 
-// SPACE, LAYOVER
- }
+enum SegmentType {
+  flight,
+  hotel,
+  airBNB,
+  bus,
+  roadTrip,
+  rentalCar,
+}
 
 extension SegmentTypeProperties on SegmentType {
   String get readableName {
@@ -82,6 +87,12 @@ extension SegmentTypeProperties on SegmentType {
         return 'Hotel';
       case SegmentType.airBNB:
         return 'AirBNB';
+      case SegmentType.bus:
+        return 'Bus';
+      case SegmentType.roadTrip:
+        return 'Roadtrip';
+      case SegmentType.rentalCar:
+        return 'Rental Car';
       default:
         return "";
     }
@@ -95,6 +106,12 @@ extension SegmentTypeProperties on SegmentType {
         return 'Hotel Name:';
       case SegmentType.airBNB:
         return 'Address:';
+      case SegmentType.bus:
+        return 'Bus Name:';
+      case SegmentType.roadTrip:
+        return 'Roadtrip';
+      case SegmentType.rentalCar:
+        return 'Rental Car Company:';
       default:
         return "";
     }
@@ -108,6 +125,25 @@ extension SegmentTypeProperties on SegmentType {
         return true;
       default:
         return false;
+    }
+  }
+
+  IconData get cardIcon {
+    switch (this) {
+      case SegmentType.flight:
+        return Icons.flight_takeoff_rounded;
+      case SegmentType.hotel:
+        return Icons.hotel;
+      case SegmentType.airBNB:
+        return Icons.hotel;
+      case SegmentType.bus:
+        return Icons.directions_bus;
+      case SegmentType.roadTrip:
+        return Icons.directions_car;
+      case SegmentType.rentalCar:
+        return Icons.car_rental;
+      default:
+        return Icons.home;
     }
   }
 }

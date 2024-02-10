@@ -81,4 +81,22 @@ class AppTextStyle {
     fontSize: 12,
     fontWeight: FontWeight.normal,
   );
+  static const TextStyle itineraryGroundTransportName = TextStyle(
+    fontFamily: fontfamily,
+    color: reverseFontColor,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle itineraryGroundTransportPath = TextStyle(
+    fontFamily: fontfamily,
+    color: reverseFontColor,
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle itineraryGroundTransportDate = TextStyle(
+    fontFamily: fontfamily,
+    color: reverseFontColor,
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+  );
 }

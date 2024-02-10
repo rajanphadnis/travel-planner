@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/general.dart';
+import 'package:travel_planner/classes/ground_transport.dart';
 import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/misc_theme_data.dart';
 import 'package:travel_planner/pages/add_segment.dart';
 
-class LodgingCard extends StatelessWidget {
-  const LodgingCard(this.lodging, this.trip, {super.key});
-  final Lodging lodging;
+class GroundTransportCard extends StatelessWidget {
+  const GroundTransportCard(this.ground, this.trip, {super.key});
+  final GroundTransport ground;
   final Trip trip;
 
   @override
@@ -26,7 +27,7 @@ class LodgingCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => AddSegment(
                 trip,
-                id: lodging.id,
+                id: ground.id,
               ),
             ),
           );
@@ -34,24 +35,32 @@ class LodgingCard extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: Icon(
-                    lodging.type.cardIcon,
+                    ground.type.cardIcon,
                     color: Colors.black,
                   ),
                 ),
-                Text(lodging.name, style: AppTextStyle.itineraryLodgingName),
+                Text(ground.name,
+                    style: AppTextStyle.itineraryGroundTransportName),
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                    "${lodging.startDateShortFormatted} - ${lodging.endDateShortFormatted}",
-                    style: AppTextStyle.itineraryLodgingDate),
+                    "${ground.startDateShortFormatted} - ${ground.endDateShortFormatted}",
+                    style: AppTextStyle.itineraryGroundTransportDate),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("${ground.start} -> ${ground.end}",
+                    style: AppTextStyle.itineraryGroundTransportPath),
               ],
             ),
           ],

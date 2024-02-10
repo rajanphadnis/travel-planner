@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/classes/general.dart';
+import 'package:travel_planner/classes/ground_transport.dart';
 import 'package:travel_planner/classes/lodging.dart';
 
 class Trip {
@@ -65,6 +66,45 @@ class Trip {
             ),
           );
           break;
+        case "ROADTRIP":
+          segmentList.add(
+            GroundTransport(
+              name: segment["name"],
+              start: segment["start"],
+              end: segment["end"],
+              type: SegmentType.roadTrip,
+              startTime: (segment["startTime"] as Timestamp).toDate(),
+              endTime: (segment["endTime"] as Timestamp).toDate(),
+              id: segment["id"],
+            ),
+          );
+          break;
+        case "RENTAL_CAR":
+          segmentList.add(
+            GroundTransport(
+              name: segment["name"],
+              start: segment["start"],
+              end: segment["end"],
+              type: SegmentType.rentalCar,
+              startTime: (segment["startTime"] as Timestamp).toDate(),
+              endTime: (segment["endTime"] as Timestamp).toDate(),
+              id: segment["id"],
+            ),
+          );
+          break;
+        case "BUS":
+          segmentList.add(
+            GroundTransport(
+              name: segment["name"],
+              start: segment["start"],
+              end: segment["end"],
+              type: SegmentType.bus,
+              startTime: (segment["startTime"] as Timestamp).toDate(),
+              endTime: (segment["endTime"] as Timestamp).toDate(),
+              id: segment["id"],
+            ),
+          );
+          break;
         default:
           debugPrint("something went wrong");
       }
@@ -78,38 +118,47 @@ class Trip {
 
   Future<bool> updateSegment(Segment toAdd) {
     Map<String, dynamic> newSegment = {};
+    Map<String, dynamic> oldSegment = {};
     final batch = _db.batch();
     var ref = _db.collection('users/$_uid/activeTrips').doc(docID);
 
     switch (toAdd.type) {
       case SegmentType.flight:
         newSegment = (toAdd as Flight).firebaseOutput;
-        Flight oldSegment =
-            segments.firstWhere((seg) => seg.id == toAdd.id) as Flight;
-        batch.update(ref, {
-          "trip": FieldValue.arrayUnion([newSegment])
-        });
-        batch.update(ref, {
-          "trip": FieldValue.arrayRemove([oldSegment.firebaseOutput])
-        });
+        oldSegment =
+            (segments.firstWhere((seg) => seg.id == toAdd.id) as Flight)
+                .firebaseOutput;
         break;
       case SegmentType.hotel:
         continue lodgingCases;
       lodgingCases:
       case SegmentType.airBNB:
         newSegment = (toAdd as Lodging).firebaseOutput;
-        Lodging oldSegment =
-            segments.firstWhere((seg) => seg.id == toAdd.id) as Lodging;
-        batch.update(ref, {
-          "trip": FieldValue.arrayUnion([newSegment])
-        });
-        batch.update(ref, {
-          "trip": FieldValue.arrayRemove([oldSegment.firebaseOutput])
-        });
+        oldSegment =
+            (segments.firstWhere((seg) => seg.id == toAdd.id) as Lodging)
+                .firebaseOutput;
+        break;
+      case SegmentType.rentalCar:
+        continue groundTransportCases;
+      case SegmentType.roadTrip:
+        continue groundTransportCases;
+      groundTransportCases:
+      case SegmentType.bus:
+        newSegment = (toAdd as GroundTransport).firebaseOutput;
+        oldSegment = (segments.firstWhere((seg) => seg.id == toAdd.id)
+                as GroundTransport)
+            .firebaseOutput;
+
         break;
       default:
         debugPrint("failed to update");
     }
+    batch.update(ref, {
+      "trip": FieldValue.arrayUnion([newSegment])
+    });
+    batch.update(ref, {
+      "trip": FieldValue.arrayRemove([oldSegment])
+    });
 
     return batch.commit().then((value) {
       _stream.add(this);
@@ -128,6 +177,11 @@ class Trip {
       case SegmentType.hotel: // empty on purpose
       case SegmentType.airBNB:
         newSegment = (toAdd as Lodging).firebaseOutput;
+        break;
+      case SegmentType.rentalCar:
+      case SegmentType.roadTrip:
+      case SegmentType.bus:
+        newSegment = (toAdd as GroundTransport).firebaseOutput;
         break;
       default:
         debugPrint("failed to update");
@@ -155,6 +209,13 @@ class Trip {
       case SegmentType.airBNB:
         foundSegment = (segments
                 .firstWhere((segment) => segment.id == idToDelete) as Lodging)
+            .firebaseOutput;
+        break;
+      case SegmentType.rentalCar:
+      case SegmentType.roadTrip:
+      case SegmentType.bus:
+        foundSegment = (segments
+                .firstWhere((segment) => segment.id == idToDelete) as GroundTransport)
             .firebaseOutput;
         break;
       default:
@@ -201,5 +262,4 @@ class Trip {
   void triggerUpdate() {
     _stream.add(this);
   }
-
 }
