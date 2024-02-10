@@ -19,6 +19,6 @@ platform :android do
   desc "Submit a new Beta Build to Google Play"
   lane :beta do
     setup_ci
-    upload_to_play_store(track: 'internal', release_status: 'draft', aab: 'app-release.aab')
+    upload_to_play_store(track: 'internal', release_status: 'completed', aab: 'app-release.aab')
   end
 end
