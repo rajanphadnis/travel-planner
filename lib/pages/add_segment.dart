@@ -351,6 +351,7 @@ class _AddSegmentState extends State<AddSegment> {
                       }
                     }
                     Navigator.pop(context);
+                    widget.trip.triggerUpdate();
                   },
                   child: const Text("Save"),
                 ),

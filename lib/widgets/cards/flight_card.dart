@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/airport_data.dart';
 import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/misc_theme_data.dart';
@@ -32,11 +33,14 @@ class FlightCard extends StatelessWidget {
         },
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Indianapolis", style: AppTextStyle.itineraryCityName),
-                Text("Detroit", style: AppTextStyle.itineraryCityName),
+                Text(
+                    flight.startAirportTitle,
+                    style: AppTextStyle.itineraryCityName),
+                Text(flight.endAirportTitle,
+                    style: AppTextStyle.itineraryCityName),
               ],
             ),
             Row(

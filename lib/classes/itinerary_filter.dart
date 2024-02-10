@@ -4,6 +4,7 @@ import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/pages/add_segment.dart';
+import 'package:travel_planner/widgets/add_segment_button.dart';
 import 'package:travel_planner/widgets/cards/flight_card.dart';
 import 'package:travel_planner/widgets/cards/layover_card.dart';
 import 'package:travel_planner/widgets/cards/lodging_card.dart';
@@ -37,7 +38,7 @@ List<Widget> genItineraryList(Trip trip, BuildContext context) {
         if (previousSegment == SegmentType.flight && !isFirstEventOfDay) {
           DateTime prevEndTime = segments[i - 1].endTime;
           itineraryList.add(LayoverCard(prevEndTime, segment.startTime,
-              (segment as Flight).startAirport));
+              (segment as Flight)));
         } else if (!isFirstEventOfDay) {
           itineraryList.add(const Padding(padding: EdgeInsets.only(top: 20)));
         }
@@ -58,14 +59,7 @@ List<Widget> genItineraryList(Trip trip, BuildContext context) {
   }
 
   itineraryList.add(
-    ElevatedButton.icon(
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AddSegment(trip)));
-      },
-      icon: const Icon(Icons.add),
-      label: const Text("Add Segment"),
-    ),
+    AddSegmentButton(trip),
   );
 
   return itineraryList;

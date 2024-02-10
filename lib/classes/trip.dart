@@ -13,8 +13,8 @@ class Trip {
   DateTime tripStartTime;
   List<Segment> segments;
 
-  final StreamController<bool> _stream = StreamController<bool>.broadcast();
-  Stream<bool> get stream => _stream.stream;
+  final StreamController<Trip> _stream = StreamController<Trip>.broadcast();
+  Stream<Trip> get stream => _stream.stream;
   String get formattedStartDate => formatDate(tripStartTime);
 
   Trip(this.name, this.docID, this.tripStartTime, this.segments);
@@ -22,7 +22,7 @@ class Trip {
   final _db = FirebaseFirestore.instance;
   final _uid = FirebaseAuth.instance.currentUser!.uid;
 
-  factory Trip.fromFirestore(QueryDocumentSnapshot<Object?> data) {
+  factory Trip.fromFirestore(dynamic data) {
     DateTime tripStartTime = (data["startTime"] as Timestamp).toDate();
     List<Segment> segmentList = [];
     List<Segment> sortedSegmentList = [];
@@ -112,7 +112,7 @@ class Trip {
     }
 
     return batch.commit().then((value) {
-      _stream.add(true);
+      _stream.add(this);
       return true;
     });
   }
@@ -136,7 +136,7 @@ class Trip {
     return ref.update({
       "trip": FieldValue.arrayUnion([newSegment])
     }).then((value) {
-      _stream.add(true);
+      _stream.add(this);
       return true;
     });
   }
@@ -164,7 +164,7 @@ class Trip {
     return ref.update({
       "trip": FieldValue.arrayRemove([foundSegment])
     }).then((value) {
-      _stream.add(true);
+      _stream.add(this);
       return true;
     });
   }
@@ -176,7 +176,7 @@ class Trip {
     final DocumentReference<Map<String, dynamic>> docRef =
         db.collection("users/${user.uid}/activeTrips").doc(docID);
     await docRef.delete();
-    _stream.add(true);
+    _stream.add(this);
     completer.complete(true);
     return completer.future;
   }
@@ -193,8 +193,13 @@ class Trip {
     });
     name = newName;
     tripStartTime = newStartDate;
-    _stream.add(true);
+    _stream.add(this);
     completer.complete(true);
     return completer.future;
   }
+
+  void triggerUpdate() {
+    _stream.add(this);
+  }
+
 }

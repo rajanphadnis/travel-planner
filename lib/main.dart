@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/airport_data.dart';
 import 'package:travel_planner/firebase_options.dart';
 import 'package:travel_planner/misc_theme_data.dart';
 import 'package:travel_planner/pages/add_trip.dart';
@@ -28,12 +29,20 @@ class TravelPlanner extends StatelessWidget {
   }
 }
 
+void loadAirportJSON(BuildContext context) {
+  final data = DefaultAssetBundle.of(context).loadString("assets/airports.json");
+  data.then((jsonData) {
+    AirportData().init(jsonData);
+  });
+}
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
   Widget build(BuildContext context) {
+    loadAirportJSON(context);
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {

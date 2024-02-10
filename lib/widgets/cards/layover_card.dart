@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/misc_theme_data.dart';
 
 class LayoverCard extends StatelessWidget {
@@ -6,7 +7,7 @@ class LayoverCard extends StatelessWidget {
       {super.key});
   final DateTime flightEnd;
   final DateTime flightStart;
-  final String layoverAirport;
+  final Flight layoverAirport;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class LayoverCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text("Layover: $layoverAirport",
+          Text("Layover: ${layoverAirport.startAirportTitle}",
               style: AppTextStyle.itineraryLayoverTitle),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

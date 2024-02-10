@@ -127,9 +127,7 @@ class _AddTripState extends State<AddTrip> {
               db.collection("users/${user.uid}/activeTrips").add({
                 "name": nameController.value.text,
                 "startTime": selectedStartDate,
-                "transportation": [],
-                "accomodation": [],
-                "stops": []
+                "trip": [],
               }).then((value) {
                 while (Navigator.canPop(context)) {
                   Navigator.pop(context);

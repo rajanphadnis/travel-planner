@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/pages/trip.dart';
 
@@ -28,12 +29,24 @@ class TripCard extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => TripScreen(trip)));
           },
-          child: Center(
-            child: Text(
-              trip.name,
-              style: const TextStyle(fontSize: 30.0),
-              textAlign: TextAlign.center,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                trip.name,
+                style: const TextStyle(fontSize: 30.0),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                formatDate(trip.tripStartTime),
+                style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w200,
+                    color: Colors.white38),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),
