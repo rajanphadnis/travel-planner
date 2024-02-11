@@ -28,6 +28,14 @@ class Airport {
     required this.longitude,
     required this.timeZone,
   });
+
+  bool isAirport(String searchCode) {
+    if (searchCode == ICAO || searchCode == IATA) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 class AirportData {
@@ -52,8 +60,8 @@ class AirportData {
         state: data["state"],
         country: data["country"],
         elevation: data["elevation"],
-        latitude: data["lat"],
-        longitude: data["lon"],
+        latitude: double.parse(data["lat"].toString()),
+        longitude: double.parse(data["lon"].toString()),
         timeZone: data["tz"],
       );
       airports[code] = toAdd;

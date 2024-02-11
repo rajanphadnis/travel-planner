@@ -1,3 +1,10 @@
+## v0.0.7
+Added QoL improvements
+
+### Changed
+- fixed layout
+- reorg
+
 ## v0.0.6
 Added QoL improvements and date headers
 

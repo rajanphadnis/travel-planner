@@ -28,7 +28,7 @@ bool isMobile(BuildContext context) {
 }
 
 String genRandomString(int length) {
-  const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789';
+  const ch = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz123456789";
   Random r = Random();
   return String.fromCharCodes(
       Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
@@ -42,18 +42,16 @@ String formatDate(DateTime date) {
 }
 
 String formatShorterDate(DateTime date) {
-  String year = date.year.toString().substring(2);
   String month = date.month.toString();
   String day = date.day.toString();
   return "$month/$day";
 }
 
 String formatTime(DateTime date) {
-  String hour =
-      date.hour > 12 ? (date.hour - 12).toString() : date.hour.toString();
+  int hourInt = date.hour > 12 ? (date.hour - 12) : date.hour;
+  String hour = hourInt == 0 ? "12" : hourInt.toString();
   String minute = date.minute.toString().padLeft(2, "0");
   String hourSymbol = date.hour > 12 ? "PM" : "AM";
-  String timezone = date.timeZoneOffset.inHours.toString();
   return "$hour:$minute $hourSymbol";
 }
 
@@ -61,8 +59,8 @@ String formatDateAndTime(DateTime date, String delineator) {
   String year = date.year.toString().substring(2);
   String month = date.month.toString();
   String day = date.day.toString();
-  String hour =
-      date.hour > 12 ? (date.hour - 12).toString() : date.hour.toString();
+  int hourInt = date.hour > 12 ? (date.hour - 12) : date.hour;
+  String hour = hourInt == 0 ? "12" : hourInt.toString();
   String minute = date.minute.toString().padLeft(2, "0");
   String hourSymbol = date.hour > 12 ? "PM" : "AM";
   String timezone = date.timeZoneOffset.inHours.toString();
@@ -82,38 +80,42 @@ extension SegmentTypeProperties on SegmentType {
   String get readableName {
     switch (this) {
       case SegmentType.flight:
-        return 'Flight';
+        return "Flight";
       case SegmentType.hotel:
-        return 'Hotel';
+        return "Hotel";
       case SegmentType.airBNB:
-        return 'AirBNB';
+        return "AirBNB";
       case SegmentType.bus:
-        return 'Bus';
+        return "Bus";
       case SegmentType.roadTrip:
-        return 'Roadtrip';
+        return "Roadtrip";
       case SegmentType.rentalCar:
-        return 'Rental Car';
+        return "Rental Car";
       default:
         return "";
     }
   }
 
-  String get nameInputString {
+  List<String> get nameInputString {
     switch (this) {
       case SegmentType.flight:
-        return 'Flight Number:';
+        return [
+          "Flight Number",
+          "Departure Airport Code",
+          "Arrival Airport Code"
+        ];
       case SegmentType.hotel:
-        return 'Hotel Name:';
+        return ["Hotel Name"];
       case SegmentType.airBNB:
-        return 'Address:';
+        return ["Address"];
       case SegmentType.bus:
-        return 'Bus Name:';
+        return ["Bus Name", "Departure Point", "Arrival Point"];
       case SegmentType.roadTrip:
-        return 'Roadtrip';
+        return ["Roadtrip", "Departure Point", "Arrival Point"];
       case SegmentType.rentalCar:
-        return 'Rental Car Company:';
+        return ["Rental Car Company", "Pickup Point", "Dropoff Point"];
       default:
-        return "";
+        return [""];
     }
   }
 
@@ -145,6 +147,22 @@ extension SegmentTypeProperties on SegmentType {
       default:
         return Icons.home;
     }
+  }
+
+  List<String> get nameList {
+    List<String> toReturn = [];
+    for (var segment in SegmentType.values) {
+      toReturn.add(segment.readableName);
+    }
+    return toReturn;
+  }
+
+  List<IconData> get iconList {
+    List<IconData> toReturn = [];
+    for (var segment in SegmentType.values) {
+      toReturn.add(segment.cardIcon);
+    }
+    return toReturn;
   }
 }
 

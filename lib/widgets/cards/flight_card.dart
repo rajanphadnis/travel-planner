@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_planner/classes/airport_data.dart';
 import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/trip.dart';
@@ -22,6 +21,9 @@ class FlightCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
+          
+        },
+        onLongPress: () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -37,8 +39,7 @@ class FlightCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                    flight.startAirportTitle,
+                Text(flight.startAirportTitle,
                     style: AppTextStyle.itineraryCityName),
                 Text(flight.endAirportTitle,
                     style: AppTextStyle.itineraryCityName),
@@ -47,35 +48,39 @@ class FlightCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(flight.startAirport,
-                        style: AppTextStyle.itineraryAirportCode),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3),
-                      child: Text(flight.startTimeFormatted,
-                          style: AppTextStyle.itineraryDepartArriveTime),
-                    ),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(flight.startAirport,
+                          style: AppTextStyle.itineraryAirportCode),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3),
+                        child: Text(flight.startTimeFormatted,
+                            style: AppTextStyle.itineraryDepartArriveTime),
+                      ),
+                    ],
+                  ),
                 ),
                 Icon(
                   flight.type.cardIcon,
                   color: Colors.black,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 3),
-                      child: Text(flight.endTimeFormatted,
-                          style: AppTextStyle.itineraryDepartArriveTime),
-                    ),
-                    Text(flight.endAirport,
-                        style: AppTextStyle.itineraryAirportCode),
-                  ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: Text(flight.endTimeFormatted,
+                            style: AppTextStyle.itineraryDepartArriveTime),
+                      ),
+                      Text(flight.endAirport,
+                          style: AppTextStyle.itineraryAirportCode),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -85,7 +90,7 @@ class FlightCard extends StatelessWidget {
                 Text(
                   flight.flightNumber,
                   style: AppTextStyle.itineraryFlightNumber,
-                )
+                ),
               ],
             )
           ],

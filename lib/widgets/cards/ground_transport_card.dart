@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/ground_transport.dart';
-import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/misc_theme_data.dart';
 import 'package:travel_planner/pages/add_segment.dart';
@@ -21,7 +20,7 @@ class GroundTransportCard extends StatelessWidget {
         color: Colors.white,
       ),
       child: InkWell(
-        onTap: () {
+        onLongPress: () {
           Navigator.push(
             context,
             MaterialPageRoute(

@@ -5,8 +5,8 @@ class Flight extends Segment {
   final String startAirport;
   final String endAirport;
   final String flightNumber;
-  final Airport startAirportData;
-  final Airport endAirportData;
+  Airport _startAirportData;
+  Airport _endAirportData;
 
   Flight(
       {required this.startAirport,
@@ -16,8 +16,8 @@ class Flight extends Segment {
       required SegmentType type,
       required DateTime startTime,
       required DateTime endTime})
-      : startAirportData = AirportData().airportSearch(startAirport),
-        endAirportData = AirportData().airportSearch(endAirport),
+      : _startAirportData = AirportData().airportSearch(startAirport),
+        _endAirportData = AirportData().airportSearch(endAirport),
         super(startTime: startTime, endTime: endTime, id: id, type: type);
 
   Map<String, dynamic> get firebaseOutput => {
@@ -33,4 +33,21 @@ class Flight extends Segment {
   String get startAirportTitle =>
       startAirportData.city ?? startAirportData.name;
   String get endAirportTitle => endAirportData.city ?? endAirportData.name;
+  Airport get startAirportData {
+    if (_startAirportData.isAirport(startAirport)) {
+      return _startAirportData;
+    } else {
+      _startAirportData = AirportData().airportSearch(startAirport);
+      return _startAirportData;
+    }
+  }
+
+  Airport get endAirportData {
+    if (_endAirportData.isAirport(endAirport)) {
+      return _endAirportData;
+    } else {
+      _endAirportData = AirportData().airportSearch(endAirport);
+      return _endAirportData;
+    }
+  }
 }

@@ -20,7 +20,7 @@ class LodgingCard extends StatelessWidget {
         color: Colors.white,
       ),
       child: InkWell(
-        onTap: () {
+        onLongPress: () {
           Navigator.push(
             context,
             MaterialPageRoute(

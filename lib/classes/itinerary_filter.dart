@@ -4,7 +4,6 @@ import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/ground_transport.dart';
 import 'package:travel_planner/classes/lodging.dart';
 import 'package:travel_planner/classes/trip.dart';
-import 'package:travel_planner/pages/add_segment.dart';
 import 'package:travel_planner/widgets/add_segment_button.dart';
 import 'package:travel_planner/widgets/cards/flight_card.dart';
 import 'package:travel_planner/widgets/cards/ground_transport_card.dart';
@@ -36,20 +35,16 @@ List<Widget> genItineraryList(Trip trip, BuildContext context) {
       isFirstEventOfDay = true;
     }
     switch (segment.type) {
-
-
       case SegmentType.flight:
         if (previousSegment == SegmentType.flight && !isFirstEventOfDay) {
           DateTime prevEndTime = segments[i - 1].endTime;
-          itineraryList.add(LayoverCard(prevEndTime, segment.startTime,
-              (segment as Flight)));
+          itineraryList.add(
+              LayoverCard(prevEndTime, segment.startTime, (segment as Flight)));
         } else if (!isFirstEventOfDay) {
           itineraryList.add(const Padding(padding: EdgeInsets.only(top: 20)));
         }
         itineraryList.add(FlightCard(segment as Flight, trip));
         break;
-
-
 
       case SegmentType.hotel:
       case SegmentType.airBNB:
@@ -59,14 +54,14 @@ List<Widget> genItineraryList(Trip trip, BuildContext context) {
         itineraryList.add(LodgingCard(segment as Lodging, trip));
         break;
 
-
       case SegmentType.rentalCar:
       case SegmentType.roadTrip:
       case SegmentType.bus:
-      if (!isFirstEventOfDay) {
+        if (!isFirstEventOfDay) {
           itineraryList.add(const Padding(padding: EdgeInsets.only(top: 20)));
         }
-        itineraryList.add(GroundTransportCard(segment as GroundTransport, trip));
+        itineraryList
+            .add(GroundTransportCard(segment as GroundTransport, trip));
         break;
       default:
         debugPrint("noneTYYYYPPPEE");
@@ -74,7 +69,7 @@ List<Widget> genItineraryList(Trip trip, BuildContext context) {
     isFirstEventOfDay = false;
     previousSegment = segment.type;
   }
-
+  itineraryList.add(const Padding(padding: EdgeInsets.only(top: 20)));
   itineraryList.add(
     AddSegmentButton(trip),
   );

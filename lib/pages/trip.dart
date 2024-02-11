@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:travel_planner/classes/itinerary_filter.dart';
 import 'package:travel_planner/classes/trip.dart';
 import 'package:travel_planner/pages/add_trip.dart';
+import 'package:travel_planner/pages/loading.dart';
 import 'package:travel_planner/widgets/add_segment_button.dart';
-import 'package:travel_planner/widgets/itinerary.dart';
 
 class TripScreen extends StatelessWidget {
   final Trip trip;
@@ -25,12 +25,7 @@ class TripScreen extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Column(
-              children: [
-                CircularProgressIndicator(),
-                Text("Loading..."),
-              ],
-            );
+            return const LoadingPage();
           }
           Trip updatedTrip = Trip.fromFirestore(snapshot.data);
           if (updatedTrip.segments.isEmpty) {
@@ -50,7 +45,7 @@ class TripScreen extends StatelessWidget {
                   ],
                 ),
                 actions: [
-                  TextButton.icon(
+                  IconButton(
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -59,7 +54,7 @@ class TripScreen extends StatelessWidget {
                                   AddTrip(trip: updatedTrip)));
                     },
                     icon: const Icon(Icons.edit),
-                    label: const Text("Edit Trip"),
+                    // label: const Text("Edit Trip"),
                   ),
                 ],
               ),
@@ -78,21 +73,20 @@ class TripScreen extends StatelessWidget {
           List<Widget> itineraryList = genItineraryList(updatedTrip, context);
           return Scaffold(
             appBar: AppBar(
-              title: Row(
+              centerTitle: true,
+              title: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(updatedTrip.name),
                   Text(
                     " (${updatedTrip.formattedStartDate})",
-                    style: const TextStyle(
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ],
               ),
               actions: [
-                TextButton.icon(
+                IconButton(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -100,7 +94,7 @@ class TripScreen extends StatelessWidget {
                             builder: (context) => AddTrip(trip: updatedTrip)));
                   },
                   icon: const Icon(Icons.edit),
-                  label: const Text("Edit Trip"),
+                  // label: const Text("Edit Trip"),
                 ),
               ],
             ),

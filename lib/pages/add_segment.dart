@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:travel_planner/classes/flight.dart';
 import 'package:travel_planner/classes/general.dart';
 import 'package:travel_planner/classes/ground_transport.dart';
@@ -36,6 +37,7 @@ class _AddSegmentState extends State<AddSegment> {
   );
   final db = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser!;
+  final TextEditingController colorController = TextEditingController();
 
   Future<void> _selectEndDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -118,6 +120,15 @@ class _AddSegmentState extends State<AddSegment> {
           nameController.value =
               TextEditingValue(text: (provided as Lodging).name);
           break;
+        case SegmentType.rentalCar:
+        case SegmentType.roadTrip:
+        case SegmentType.bus:
+          nameController.value =
+              TextEditingValue(text: (provided as GroundTransport).name);
+          startingPointController.value =
+              TextEditingValue(text: provided.start);
+          endingPointController.value = TextEditingValue(text: provided.end);
+          break;
         default:
           debugPrint("not init");
       }
@@ -193,142 +204,185 @@ class _AddSegmentState extends State<AddSegment> {
       ),
       body: Form(
         key: _formKey,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 15),
+          child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  children: [
-                    ListTile(
-                      title: const Text('Flight'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.flight,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Hotel'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.hotel,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('AirBNB'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.airBNB,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Bus'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.bus,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Roadtrip'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.roadTrip,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Rental Car'),
-                      leading: Radio<SegmentType>(
-                        value: SegmentType.rentalCar,
-                        groupValue: selectedType,
-                        onChanged: (SegmentType? value) {
-                          setState(() {
-                            selectedType = value!;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: DropdownMenu<SegmentType>(
+                    initialSelection: selectedType,
+                    controller: colorController,
+                    requestFocusOnTap: false,
+                    label: const Text('Segment Type'),
+                    onSelected: (SegmentType? color) {
+                      if (color != null) {
+                        setState(() {
+                          selectedType = color;
+                        });
+                      }
+                    },
+                    dropdownMenuEntries: SegmentType.values
+                        .map<DropdownMenuEntry<SegmentType>>(
+                            (SegmentType type) {
+                      return DropdownMenuEntry<SegmentType>(
+                        value: type,
+                        label: type.readableName,
+                      );
+                    }).toList(),
+                  ),
                 ),
                 selectedType != SegmentType.roadTrip
-                    ? Text(selectedType.nameInputString)
-                    : Container(),
-                selectedType != SegmentType.roadTrip
-                    ? TextFormField(
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: TextFormField(
+                          autofocus: false,
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: selectedType.nameInputString[0],
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                        ),
                       )
                     : Container(),
                 !selectedType.isLodging
                     ? Column(
                         children: [
-                          Text(selectedType == SegmentType.flight
-                              ? "Departure Airport Code:"
-                              : "Departure:"),
-                          TextFormField(
-                            controller: startingPointController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: TextFormField(
+                              autofocus: false,
+                              controller: startingPointController,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: selectedType.nameInputString[1],
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                          Text(selectedType == SegmentType.flight
-                              ? "Destination Airport Code:"
-                              : "Destination:"),
-                          TextFormField(
-                            controller: endingPointController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: TextFormField(
+                              autofocus: false,
+                              controller: endingPointController,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: selectedType.nameInputString[2],
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                         ],
                       )
                     : Container(),
-                ElevatedButton.icon(
-                  onPressed: () => _selectStartDate(context),
-                  icon: const Icon(Icons.calendar_today),
-                  label: Text(
-                      "Start Date: ${selectedType.isLodging ? selectedStartDate.toLocal().toString().split(" ")[0] : formatDateAndTime(selectedStartDate, '@')}"),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => _selectEndDate(context),
-                  icon: const Icon(Icons.calendar_today),
-                  label: Text(
-                      "End Date: ${selectedType.isLodging ? selectedEndDate.toLocal().toString().split(" ")[0] : formatDateAndTime(selectedEndDate, '@')}"),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 10, left: 30, right: 30),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () => _selectStartDate(context),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.calendar_today),
+                                  const Text(
+                                    "Start Date",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      selectedType.isLodging
+                                          ? selectedStartDate
+                                              .toLocal()
+                                              .toString()
+                                              .split(" ")[0]
+                                          : formatDateAndTime(
+                                              selectedStartDate, '\n'),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () => _selectEndDate(context),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.calendar_today),
+                                  const Text(
+                                    "End Date",
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      selectedType.isLodging
+                                          ? selectedEndDate
+                                              .toLocal()
+                                              .toString()
+                                              .split(" ")[0]
+                                          : formatDateAndTime(
+                                              selectedEndDate, '\n'),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
